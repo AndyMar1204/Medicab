@@ -1,0 +1,46 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.andy.medicab.controller;
+
+import java.util.List;
+import org.springframework.http.ResponseEntity;
+
+/**
+ *
+ * @author Ir Andy
+ * @param <T>
+ */
+public interface GenericCrud<T> {
+
+    /**
+     *
+     * @return
+     */
+    ResponseEntity<T> save(T t);
+
+    /**
+     *
+     * @param t
+     * @return
+     */
+    ResponseEntity<T> update(T t,Long id);
+
+    /**
+     *
+     * @return
+     */
+    ResponseEntity<Void> delete(long id);
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    ResponseEntity<T> findById(long id);
+    ResponseEntity<List<T>> getAll();
+
+    
+}

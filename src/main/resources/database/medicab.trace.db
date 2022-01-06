@@ -1,0 +1,8 @@
+2021-12-12 22:28:35 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "TAXI[*]  ADMIN"; attendu "TRUNCATE"
+Syntax error in SQL statement "TAXI[*]  ADMIN"; expected "TRUNCATE"; SQL statement:
+TAXI  ADMIN [42001-199]
+2022-01-06 11:57:53 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "SELECT * FROMACCOUNT[*]"
+Syntax error in SQL statement "SELECT * FROMACCOUNT[*]"; SQL statement:
+SELECT * FROMACCOUNT [42000-199]
