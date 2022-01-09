@@ -9,7 +9,7 @@ import javax.persistence.Enumerated;
  * @author Ir Andy
  */
 @Entity
-public class Admin extends Account{
+public class Admin extends User{
     @Enumerated(EnumType.STRING)
     private AdminType type;
 

@@ -124,7 +124,8 @@ public class UserRestController {
         if(this.service.checkIfExist(id)){
             User user = service.getById(id);
             System.out.println(position);
-            user.setPosition(position);
+            user.getPosition().setLatitude(position.getLatitude());
+            user.getPosition().setLongitude(position.getLongitude());
             user = service.update(user);
             return new ResponseEntity<User>(user,HttpStatus.OK);
         }else

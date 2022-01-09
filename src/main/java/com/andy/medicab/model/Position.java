@@ -40,4 +40,12 @@ public class Position implements Serializable {
         this.setLongitude(Long.valueOf(0));
         this.setLatitude(Long.valueOf(0));
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 }

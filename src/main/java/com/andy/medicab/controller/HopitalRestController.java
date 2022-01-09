@@ -73,6 +73,7 @@ public class HopitalRestController implements GenericCrud<Hopital> {
     @GetMapping(path = "getById/{id}")
     public ResponseEntity<Hopital> findById(@PathVariable long id) {
         Hopital hopital = service.getById(id);
+
         if(hopital != null){
             return new ResponseEntity<Hopital>(hopital, HttpStatus.FOUND);
         }
