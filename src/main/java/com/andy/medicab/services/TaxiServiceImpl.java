@@ -1,7 +1,7 @@
 package com.andy.medicab.services;
 
 import com.andy.medicab.dao.ITaxiDao;
-import com.andy.medicab.model.Taxi;
+import com.andy.medicab.model.Driver;
 import com.andy.medicab.services.interfaces.ITaxiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,29 +14,29 @@ public class TaxiServiceImpl implements ITaxiService {
     @Autowired
     private ITaxiDao dao;
     /**
-     * @param taxi
+     * @param driver
      * @return
      */
     @Override
-    public Taxi save(Taxi taxi) {
-        return dao.save(taxi);
+    public Driver save(Driver driver) {
+        return dao.save(driver);
     }
 
     /**
-     * @param taxi
+     * @param driver
      * @return
      */
     @Override
-    public Taxi update(Taxi taxi) {
-        return dao.save(taxi);
+    public Driver update(Driver driver) {
+        return dao.save(driver);
     }
 
     /**
-     * @param taxi
+     * @param driver
      */
     @Override
-    public void delete(Taxi taxi) {
-dao.delete(taxi);
+    public void delete(Driver driver) {
+        dao.delete(driver);
     }
 
     /**
@@ -44,7 +44,7 @@ dao.delete(taxi);
      * @return
      */
     @Override
-    public Taxi getById(long id) {
+    public Driver getById(long id) {
         return dao.findById(id).get();
     }
 
@@ -52,7 +52,7 @@ dao.delete(taxi);
      * @return
      */
     @Override
-    public List<Taxi> getAll() {
+    public List<Driver> getAll() {
         return dao.findAll();
     }
 

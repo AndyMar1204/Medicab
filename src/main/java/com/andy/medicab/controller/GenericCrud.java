@@ -42,5 +42,12 @@ public interface GenericCrud<T> {
     ResponseEntity<T> findById(long id);
     ResponseEntity<List<T>> getAll();
 
-    
+    public static final String MAPPING_SAVE = "save";
+    public static final String MAPPING_UPDATE = "update";
+    public static final String MAPPING_FIND_BY_ID = "findById/";
+    public static final String MAPPING_DELETE_BY_ID = "deleteById/";
+    public static final String MAPPING_FIND_ALL = "findAll";
+    public static final String MAPPING_CHECK_EXIST = "checkExist/";
+
+    ResponseEntity<Boolean> checkExistById(long id);
 }

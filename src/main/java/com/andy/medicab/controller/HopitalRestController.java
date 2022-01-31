@@ -86,4 +86,9 @@ public class HopitalRestController implements GenericCrud<Hopital> {
         List<Hopital> hopitals = service.getAll();
         return new ResponseEntity<List<Hopital>>(hopitals,HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<Boolean> checkExistById(long id) {
+        return null;
+    }
 }

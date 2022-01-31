@@ -3,6 +3,7 @@ package com.andy.medicab.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import javax.persistence.*;
 
@@ -33,6 +34,7 @@ public class Account implements Serializable {
     private LocalDateTime dateCreated;
     @OneToOne(cascade={CascadeType.ALL})
     private Adresse adresse;
+
 
     public Adresse getAdresse() {
         return adresse;

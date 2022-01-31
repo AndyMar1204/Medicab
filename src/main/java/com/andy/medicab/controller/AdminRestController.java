@@ -86,6 +86,12 @@ admin.setAdresse(new Adresse());
         List<Admin> admins = this.adminDao.getAll();
         return new ResponseEntity<List<Admin>>(admins, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<Boolean> checkExistById(long id) {
+        return null;
+    }
+
     @PostMapping(path = "/connexion")
     public ResponseEntity<Admin> connexion(@RequestBody Admin admin){
         Admin admin1 = this.adminDao.findByNumberAndPassword(admin.getNumber(),admin.getPassword());

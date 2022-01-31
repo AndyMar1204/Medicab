@@ -35,6 +35,7 @@ public class MedicabApplication {
     public ResponseEntity<List<AdminType>> getAllType() {
         List<AdminType> list = new ArrayList();
         for (AdminType typ : AdminType.values()) {
+
             list.add(typ);
         }
         return new ResponseEntity<List<AdminType>>(list, HttpStatus.OK);

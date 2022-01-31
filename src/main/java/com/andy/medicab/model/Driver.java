@@ -13,8 +13,8 @@ import javax.persistence.Id;
  */
 
 
-@Entity
-public class Taxi extends Account{
+@Entity(name = "DRIVER")
+public class Driver extends Account {
     private String plaque;
 
 
