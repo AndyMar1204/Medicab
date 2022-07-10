@@ -1,15 +1,7 @@
 package com.andy.Medicab;
 
-import com.andy.Medicab.model.Account;
-import com.andy.Medicab.model.Driver;
-import com.andy.Medicab.model.Hopital;
-import com.andy.Medicab.model.Transport;
-import com.andy.Medicab.model.Urgences;
-import com.andy.Medicab.model.User;
-import com.andy.Medicab.services.Accountservice;
-import com.andy.Medicab.services.DriverService;
-import com.andy.Medicab.services.HopitalService;
-import com.andy.Medicab.services.UserService;
+import com.andy.Medicab.model.*;
+import com.andy.Medicab.services.*;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -39,6 +31,8 @@ public class MedicabApiApplication {
     @Autowired
     private DriverService driverService;
 
+    @Autowired
+    private AdresseService adresseService;
     public static void main(String[] args) {
         
         SpringApplication.run(MedicabApiApplication.class, args);
@@ -47,7 +41,7 @@ public class MedicabApiApplication {
     @RequestMapping("/")
     public String home() {
 
-        return "API MEDICAB v1.0.1";
+        return "API MEDICAB v2.0.0";
     }
 
     @PostMapping(path = "inscription/{typeAccount}")
@@ -108,5 +102,11 @@ public class MedicabApiApplication {
         for (Transport t : Transport.values())
             list.add(t);
         return new ResponseEntity<List<Transport>>(list, HttpStatus.OK);
+    }
+    @PutMapping(path="updateAdresse")
+    public ResponseEntity<Adresse> updateAdresse(@RequestBody Adresse adresse){
+        if (adresseService.existById(adresse.getId())){
+            return  new ResponseEntity<>(adresseService.update(adresse),HttpStatus.OK);
+        }else return buildErrorMessage("Echec de mise à jour");
     }
 }

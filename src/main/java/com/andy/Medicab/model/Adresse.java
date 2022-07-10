@@ -79,12 +79,6 @@ public class Adresse implements Serializable {
         this.numero = numero;
     }
 
-    public Adresse() {
-        setPays("R.D.Congo");
-        setProvince("Kinshasa");
-        setVille("Kinshasa");
-    }
-
     @Override
     public String toString() {
         return new StringJoiner(", ", Adresse.class.getSimpleName() + "[", "]")

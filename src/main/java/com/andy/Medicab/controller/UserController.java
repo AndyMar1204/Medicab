@@ -1,14 +1,23 @@
 package com.andy.Medicab.controller;
 
+import com.andy.Medicab.model.Account;
+import com.andy.Medicab.model.Doctor;
+import com.andy.Medicab.model.Hopital;
 import com.andy.Medicab.model.User;
+import com.andy.Medicab.services.DoctorService;
+import com.andy.Medicab.services.HopitalService;
 import com.andy.Medicab.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 import static com.andy.Medicab.controller.Outils.*;
@@ -23,7 +32,12 @@ import static com.andy.Medicab.controller.Outils.*;
 public class UserController implements Crud<User,Long>{
     @Autowired
     private UserService service;
-
+    @Autowired
+    private DoctorService doctorService;
+    @Autowired
+    private HopitalService hopitalService;
+    @Autowired
+    private JavaMailSender javaMailSender;
     @RequestMapping("")
     public String home() {
         return "API pour les utilisateurs";
@@ -34,6 +48,7 @@ public class UserController implements Crud<User,Long>{
         try {
         	user.setPassword(encryptPassword(user.getPassword()));
             Long id = service.save(user);
+            this.sendSuccessMessage(user);
             return  new ResponseEntity<Long>(id, HttpStatus.CREATED);
         }catch (Exception e){
             //e.printStackTrace();
@@ -43,7 +58,7 @@ public class UserController implements Crud<User,Long>{
             return buildErrorMessage(e,"Echec d'enregistrement, \n Reessayez plus tard");
         }
     }
-    @PutMapping(path = UPDATE_+"{id}")
+    @PutMapping(path = UPDATE_+"/{id}")
     @Override
     public ResponseEntity<User> update(@RequestBody User user,@PathVariable Long id) {
         try {
@@ -73,12 +88,12 @@ public class UserController implements Crud<User,Long>{
         }
 
     }
-    @GetMapping(FIND_BY_ID+"¨{id}")
+    @GetMapping(FIND_BY_ID+"{id}")
     @Override
     public ResponseEntity<User> findById(@PathVariable Long id) {
         try {
             User user= service.findById(id);
-            return new ResponseEntity<User>(user,HttpStatus.FOUND);
+            return new ResponseEntity<User>(user,HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
             HttpHeaders headers = new HttpHeaders();
@@ -91,7 +106,7 @@ public class UserController implements Crud<User,Long>{
     @Override
     public ResponseEntity<List<User>> getAll() {
         try {
-            return new ResponseEntity<List<User>>(service.findAll(),HttpStatus.FOUND);
+            return new ResponseEntity<List<User>>(service.findAll(),HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
             HttpHeaders headers = new HttpHeaders();
@@ -116,8 +131,14 @@ public class UserController implements Crud<User,Long>{
     	if(service.existById(id)) {
     		try {
     			User us = service.findById(id);
-        		us.setNom(user.getNom());
+        		us.setUsername(user.getUsername());
         		us.setPostnom(user.getPostnom());
+                us.setDonneurOrgane(user.getDonneurOrgane());
+                us.setAlergies(user.getAlergies());
+                us.setTraitement(user.getTraitement());
+                us.setGroupeSanguin(user.getGroupeSanguin());
+                us.setSexe(user.getSexe());
+
         		return new ResponseEntity<User>(service.update(us),HttpStatus.OK);
     		}catch(Exception ex) {
     			return buildErrorMessage(ex, "Echec");
@@ -126,5 +147,49 @@ public class UserController implements Crud<User,Long>{
     		
     	}else
     	return buildErrorMessage("Aucun utilisateur à modifier");
+    }
+    @PostMapping(path = "addUserDoctor/{id_user}")
+    public ResponseEntity<Doctor> addUserDoctor(@PathVariable Long id_user,@RequestBody Doctor doctor){
+        if(service.existById(id_user)){
+            User user = service.findById((id_user));
+            if ((doctor.getId()==null)||(doctor.getId()<=0L)){
+                long id_doc = doctorService.save(doctor);
+                doctor.setId(id_doc);
+                user.setDoctor(doctor);
+            }else {
+                Doctor doc = doctorService.findById(doctor.getId());
+                user.setDoctor(doc);
+            }
+            service.update(user);
+            return new ResponseEntity<Doctor>(doctor,HttpStatus.OK);
+        }
+
+        return buildErrorMessage("Une erreur est survenue, Reessayez plus tard");
+    }
+    @GetMapping(path = "setUserHopital/{id_user}/{id_hopital}")
+    ResponseEntity addHopitalReference(@PathVariable long id_user,@PathVariable long id_hopital){
+        if((service.existById(id_user))&&(hopitalService.existById(id_hopital))){
+            User user = service.findById(id_user);
+            Hopital hopital = hopitalService.findById(id_hopital);
+            user.setHopital(hopital);
+            service.update(user);
+            return buildSuccessMessage("Mise à jour reussie");
+        }
+    return  buildSuccessMessage("Echec, Aucune modification effectuée");
+    }
+
+    void sendSuccessMessage(Account account){
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setFrom("MEDICAB");
+        mail.setTo(account.getEmail());
+        mail.setSentDate(new Date());
+        mail.setSubject("Inscription reussie");
+        mail.setText("Votre inscription viens d'etre faite avec succes");
+        try {
+            javaMailSender.send(mail);
+        }catch (MailException ex){
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
+        }
     }
 }

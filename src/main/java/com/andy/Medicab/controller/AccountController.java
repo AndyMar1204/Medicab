@@ -95,5 +95,16 @@ public class AccountController implements Crud<Account, Long> {
     	}else
     		return buildErrorMessage("Adresse introuvable");
     }
+    @PutMapping(path = "updateAccount")
+    public ResponseEntity<Account> updateAccount(@RequestBody Account account){
+        if (accountservice.existById(account.getId())){
+            Account account1 = accountservice.findById(account.getId());
+            account1.setInfos(account.getInfos());
+            account1.setEmail(account.getEmail());
+            account1.setUsername(account.getUsername());
+            account1.setNumber(account.getNumber());
+            return new ResponseEntity<Account>(accountservice.update(account1),HttpStatus.OK);
+        }else return buildErrorMessage("Echec de mise à jour");
+    }
 
 }

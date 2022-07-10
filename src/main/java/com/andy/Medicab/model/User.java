@@ -14,12 +14,30 @@ import java.util.StringJoiner;
 @Entity
 @PrimaryKeyJoinColumn(name = "account_id")
 public class User extends Account {
-    private String nom;
+
     private String postnom;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private Doctor doctor;
+    private String sexe;
+    private String groupeSanguin;
+    private  String alergies;
+    private String donneurOrgane;
+
+    @Lob
+    private String traitement;
+
     @OneToMany(cascade={CascadeType.ALL}, orphanRemoval = true,fetch = FetchType.EAGER)
-    List<Urgence> urgences = new ArrayList<>();
+    private List<Urgence> urgences = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "hopital_id")
+    private Hopital hopital;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Doctor doctor;
+    public Hopital getHopital() {
+        return hopital;
+    }
+
+    public void setHopital(Hopital hopital) {
+        this.hopital = hopital;
+    }
 
     public List<Urgence> getUrgences() {
         return urgences;
@@ -34,6 +52,7 @@ public class User extends Account {
         urgences.remove(urgence);
         urgence.setUser(null);
     }
+
 
     @Override
     public int hashCode() {
@@ -55,14 +74,6 @@ public class User extends Account {
         return true;
     }
 
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
     public String getPostnom() {
         return postnom;
     }
@@ -71,12 +82,6 @@ public class User extends Account {
         this.postnom = postnom;
     }
 
-    @Override
-    public String toString() {
-        return "User{"  +" id : "+id+ "nom=" + nom + ", postnom=" + postnom + ", doctor=" + doctor + ", urgences=" + urgences + '}';
-    }
-
-   
     public Doctor getDoctor() {
         return doctor;
     }
@@ -85,5 +90,43 @@ public class User extends Account {
         this.doctor = doctor;
     }
 
+    public String getSexe() {
+        return sexe;
+    }
 
+    public void setSexe(String sexe) {
+        this.sexe = sexe;
+    }
+
+    public String getGroupeSanguin() {
+        return groupeSanguin;
+    }
+
+    public String getAlergies() {
+        return alergies;
+    }
+
+    public void setAlergies(String alergies) {
+        this.alergies = alergies;
+    }
+
+    public String getDonneurOrgane() {
+        return donneurOrgane;
+    }
+
+    public void setDonneurOrgane(String donneurOrgane) {
+        this.donneurOrgane = donneurOrgane;
+    }
+
+    public void setGroupeSanguin(String groupeSanguin) {
+        this.groupeSanguin = groupeSanguin;
+    }
+
+    public String getTraitement() {
+        return traitement;
+    }
+
+    public void setTraitement(String traitement) {
+        this.traitement = traitement;
+    }
 }

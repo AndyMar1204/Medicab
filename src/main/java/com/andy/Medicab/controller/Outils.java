@@ -17,9 +17,9 @@ import java.util.Random;
 
 public class Outils {
     public static final String SAVE_ = "save";
-    public static final String UPDATE_ = "update";
+    public static final String UPDATE_ = "update/";
     public static final String FIND_BY_ID = "findById/";
-    public static final String DELETE_BY_ID = "deleteByID/";
+    public static final String DELETE_BY_ID = "deleteById/";
     public static final String FIND_ALL = "findAll";
     public static final String CHECK_EXIST_BY_ID = "checkExist/";
     public static final String BASE_URL = "*";

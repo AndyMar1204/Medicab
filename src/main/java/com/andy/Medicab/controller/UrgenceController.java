@@ -58,7 +58,7 @@ public class UrgenceController implements Crud<Urgence,Long>{
             return buildErrorMessage(ex,"Echec de le suppression");
         }
     }
-    @GetMapping(FIND_BY_ID+"¨{id}")
+    @GetMapping(FIND_BY_ID+"{id}")
     @Override
     public ResponseEntity<Urgence> findById(@PathVariable Long id) {
         try {
@@ -78,7 +78,7 @@ public class UrgenceController implements Crud<Urgence,Long>{
     }
     @GetMapping(CHECK_EXIST_BY_ID+"{id}")
     @Override
-    public ResponseEntity<Boolean> checkExist(Long id) {
+    public ResponseEntity<Boolean> checkExist(@PathVariable Long id) {
         try {
             return new ResponseEntity<Boolean>(service.existById(id),HttpStatus.OK);
         }catch (Exception ex){

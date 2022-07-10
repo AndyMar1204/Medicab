@@ -30,6 +30,8 @@ public class Account implements Serializable {
 	private Position position;
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime dateCreated;
+	@Lob
+	private String infos;
 	@OneToOne(cascade = { CascadeType.ALL })
 	private Adresse adresse;
 	@OneToOne(cascade = { CascadeType.ALL })
@@ -120,9 +122,7 @@ public class Account implements Serializable {
 		this.dateCreated = dateCreated;
 	}
 
-	public Account(
-
-	) {
+	public Account(	) {
 		this.setPosition(new Position());
 		this.setAdresse(new Adresse());
 		this.setProfil(new FileInfo());
@@ -143,5 +143,13 @@ public class Account implements Serializable {
 
 	public void setProfil(FileInfo profil) {
 		this.profil = profil;
+	}
+
+	public String getInfos() {
+		return infos;
+	}
+
+	public void setInfos(String infos) {
+		this.infos = infos;
 	}
 }

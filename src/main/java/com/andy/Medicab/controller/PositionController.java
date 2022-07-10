@@ -31,7 +31,7 @@ public class PositionController implements Crud<Position, Long> {
 		}
 	}
 
-	@PutMapping(UPDATE_ + "/{id}")
+	@PutMapping(UPDATE_ + "{id}")
 	@Override
 	public ResponseEntity<Position> update(@RequestBody Position position, @PathVariable Long id) {
 		try {
@@ -55,7 +55,7 @@ public class PositionController implements Crud<Position, Long> {
 		}
 	}
 
-	@GetMapping(FIND_BY_ID + "¨{id}")
+	@GetMapping(FIND_BY_ID + "{id}")
 	@Override
 	public ResponseEntity<Position> findById(@PathVariable Long id) {
 		try {

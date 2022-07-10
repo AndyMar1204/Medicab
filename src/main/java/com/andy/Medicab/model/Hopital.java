@@ -14,8 +14,7 @@ public class Hopital extends Account {
     private LocalTime heureOuverture;
     private LocalTime heureFermeture;
     private Boolean ouvert;
-    @Column(length = 2550)
-    private String infos;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Urgence> urgences = new ArrayList<>();
 
@@ -43,13 +42,7 @@ public class Hopital extends Account {
         this.nom = nom;
     }
 
-    public String getInfos() {
-        return infos;
-    }
 
-    public void setInfos(String infos) {
-        this.infos = infos;
-    }
 
     public LocalTime getHeureOuverture() {
         return heureOuverture;
