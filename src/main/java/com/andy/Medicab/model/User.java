@@ -29,7 +29,8 @@ public class User extends Account {
     @ManyToOne
     @JoinColumn(name = "hopital_id")
     private Hopital hopital;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "doc_id")
     private Doctor doctor;
     public Hopital getHopital() {
         return hopital;
@@ -128,5 +129,21 @@ public class User extends Account {
 
     public void setTraitement(String traitement) {
         this.traitement = traitement;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", postnom='" + postnom + '\'' +
+                ", sexe='" + sexe + '\'' +
+                ", groupeSanguin='" + groupeSanguin + '\'' +
+                ", alergies='" + alergies + '\'' +
+                ", donneurOrgane='" + donneurOrgane + '\'' +
+                ", traitement='" + traitement + '\'' +
+                ", urgences=" + urgences +
+                ", hopital=" + hopital +
+                ", doctor=" + doctor +
+                '}';
     }
 }

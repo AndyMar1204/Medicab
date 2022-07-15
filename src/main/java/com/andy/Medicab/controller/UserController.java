@@ -36,7 +36,7 @@ public class UserController implements Crud<User,Long>{
     private DoctorService doctorService;
     @Autowired
     private HopitalService hopitalService;
-    @Autowired
+
     private JavaMailSender javaMailSender;
     @RequestMapping("")
     public String home() {
@@ -62,9 +62,11 @@ public class UserController implements Crud<User,Long>{
     @Override
     public ResponseEntity<User> update(@RequestBody User user,@PathVariable Long id) {
         try {
-            user.setId(id);
-            User user1 = service.update(user);
-            return  new ResponseEntity<User>(user1, HttpStatus.CREATED);
+            if (service.existById(user.getId())){
+                return  new ResponseEntity<User>(service.update(user), HttpStatus.CREATED);
+            }else return buildErrorMessage("Erreur de mise à jours ");
+            //User user1 = service.update(user);
+
         }catch (Exception e){
             e.printStackTrace();
             HttpHeaders headers = new HttpHeaders();
@@ -128,6 +130,7 @@ public class UserController implements Crud<User,Long>{
     }
     @PostMapping(path="updateInfo/{id}")
     ResponseEntity<User> updateUserInfo(@PathVariable Long id,@RequestBody User user){
+        System.out.println(user);
     	if(service.existById(id)) {
     		try {
     			User us = service.findById(id);
@@ -150,12 +153,14 @@ public class UserController implements Crud<User,Long>{
     }
     @PostMapping(path = "addUserDoctor/{id_user}")
     public ResponseEntity<Doctor> addUserDoctor(@PathVariable Long id_user,@RequestBody Doctor doctor){
+
         if(service.existById(id_user)){
             User user = service.findById((id_user));
-            if ((doctor.getId()==null)||(doctor.getId()<=0L)){
+            if ((doctor.getId()==null)){
                 long id_doc = doctorService.save(doctor);
                 doctor.setId(id_doc);
-                user.setDoctor(doctor);
+                user.setDoctor(doctorService.findById(id_doc));
+                //user.setDoctor(doctor);
             }else {
                 Doctor doc = doctorService.findById(doctor.getId());
                 user.setDoctor(doc);

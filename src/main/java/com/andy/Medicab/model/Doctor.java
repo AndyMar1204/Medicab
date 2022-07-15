@@ -22,6 +22,8 @@ public class Doctor implements Serializable {
     private String email;
     private String fonction;
     private String adresse;
+    @Lob
+    private String biography;
     @OneToOne
     @JoinColumn(name = "profil_id")
     private FileInfo profil;
@@ -111,5 +113,13 @@ public class Doctor implements Serializable {
     public void removePatient(User user){
         this.patients.remove(user);
         user.setDoctor(null);
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
     }
 }
