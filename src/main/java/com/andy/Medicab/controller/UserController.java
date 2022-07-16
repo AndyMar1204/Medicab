@@ -5,6 +5,7 @@ import com.andy.Medicab.model.Doctor;
 import com.andy.Medicab.model.Hopital;
 import com.andy.Medicab.model.User;
 import com.andy.Medicab.services.DoctorService;
+import com.andy.Medicab.services.EmailServiceImpl;
 import com.andy.Medicab.services.HopitalService;
 import com.andy.Medicab.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,8 @@ public class UserController implements Crud<User,Long>{
     private DoctorService doctorService;
     @Autowired
     private HopitalService hopitalService;
-
-    private JavaMailSender javaMailSender;
+        @Autowired
+        private EmailServiceImpl emailService;
     @RequestMapping("")
     public String home() {
         return "API pour les utilisateurs";
@@ -184,17 +185,6 @@ public class UserController implements Crud<User,Long>{
     }
 
     void sendSuccessMessage(Account account){
-        SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setFrom("MEDICAB");
-        mail.setTo(account.getEmail());
-        mail.setSentDate(new Date());
-        mail.setSubject("Inscription reussie");
-        mail.setText("Votre inscription viens d'etre faite avec succes");
-        try {
-            javaMailSender.send(mail);
-        }catch (MailException ex){
-            ex.printStackTrace();
-            System.out.println(ex.getMessage());
-        }
+       emailService.sendMail(account.getEmail(),"Confirmation d'inscription","Votre inscription a été effectuée avec success");
     }
 }
