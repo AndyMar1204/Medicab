@@ -55,7 +55,7 @@
     </dependencies>
 
     <build>
-        <finalName>API MEDICAB</finalName>
+        <finalName>MEDICAB</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
