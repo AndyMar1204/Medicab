@@ -13,6 +13,9 @@ import java.security.spec.ECField;
 import java.util.List;
 
 import static com.andy.Medicab.controller.Outils.*;
+import com.andy.Medicab.model.Transport;
+import com.andy.Medicab.model.User;
+import com.andy.Medicab.services.UserService;
 
 /**
  * @author Ir Andy
@@ -23,7 +26,8 @@ import static com.andy.Medicab.controller.Outils.*;
 public class UrgenceController implements Crud<Urgence,Long>{
     @Autowired
     private UrgenceService service;
-
+    @Autowired
+    private UserService userService;
     @Autowired
     private HopitalService hopitalService;
     @PostMapping(path = SAVE_)
@@ -35,7 +39,8 @@ public class UrgenceController implements Crud<Urgence,Long>{
             System.out.println(urgence.toString());
             return new ResponseEntity<Long>(service.save(urgence), HttpStatus.CREATED);
         }catch (Exception ex){
-            return buildErrorMessage(ex,"Echec de l'enregistrement");
+            
+            return buildErrorMessage(ex,"Impossible de lancer une urgence, reesayer plus tard");
         }
     }
     @PutMapping(UPDATE_+"{id}")
@@ -85,4 +90,31 @@ public class UrgenceController implements Crud<Urgence,Long>{
             return buildErrorMessage(ex, "Impossible d'acceder au serveur");
         }
     }
+    @PostMapping("save/{id_user}")
+    public ResponseEntity<Urgence> addUrgence(@PathVariable long id_user,@RequestBody Urgence urgence){
+        User user = this.userService.findById(id_user);
+        
+        if(user==null)
+            return Outils.buildErrorMessage("Utilisateur introuvable, connectez vous à partir d'un compte utilisateur");
+        Hopital hopital= Outils.getNearHopital(user.getPosition(), hopitalService.findAll());
+        if(hopital == null)
+           return Outils.buildErrorMessage("Impossible de localiser un hopital tout près de vous");
+        urgence.setHopital(hopital);
+        urgence.setTypeTransport(Transport.Taxi);
+        urgence.setUser(user);
+        try{
+            Long id = service.save(urgence);
+            return new ResponseEntity(service.findById(id),HttpStatus.OK);
+        }catch(Exception ex){
+            return Outils.buildErrorMessage("Impossible d'initialiser votre urgence, veuillez reesayer plus tard "+ex.getMessage());
+        }
+    }
+   @GetMapping(path = "findAllByUser/{id_user}")
+   public ResponseEntity<List<Urgence>> findAllByUser(@PathVariable Long id_user){
+        User user = userService.findById(id_user);
+       if (user == null) {
+           return buildErrorMessage("Aucun utilisateur trouvé");
+       }
+        return new ResponseEntity<>(service.findAllUserUrgence(user),HttpStatus.OK);
+   }
 }

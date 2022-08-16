@@ -35,7 +35,13 @@ public class UserService implements GenericService<User,Long> {
 
     @Override
     public User findById(Long id) {
-        User user = dao.findById(id).get();
+        User user = null;
+        try {
+            user = dao.findById(id).get();
+        }catch (Exception ex){
+
+        }
+
         return user;
     }
 

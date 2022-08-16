@@ -2,7 +2,6 @@ package com.andy.Medicab;
 
 import com.andy.Medicab.model.*;
 import com.andy.Medicab.services.*;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,11 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.andy.Medicab.controller.Outils.*;
 
@@ -79,7 +75,20 @@ public class MedicabApiApplication {
         try {
             Account account = accountservice.connexionByNumber(number, encryptPassword(password));
             if (account == null) {
-                return buildErrorMessage(new Exception("Impossible de se connecter"), "Impossible de se connecter!!!!Reverifiez vos identifiants");
+                return buildErrorMessage( "Impossible de se connecter!!!!Reverifiez vos identifiants");
+            } else
+                return new ResponseEntity<Account>(account, HttpStatus.OK);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return buildErrorMessage(ex, "Impossible d'acceder à la base de donnees");
+        }
+    }
+    @GetMapping(path = "connexionSecure/{number}/{password}")
+    public ResponseEntity<Account> connectionByNumberHashedPassPassword(@PathVariable String number, @PathVariable String password) {
+        try {
+            Account account = accountservice.connexionByNumber(number, password);
+            if (account == null) {
+                return buildErrorMessage( "Impossible de se connecter!!!!Reverifiez vos identifiants");
             } else
                 return new ResponseEntity<Account>(account, HttpStatus.OK);
         } catch (Exception ex) {
@@ -90,10 +99,10 @@ public class MedicabApiApplication {
 
     @GetMapping(path = "getAllUrgences")
     public ResponseEntity<List<Urgences>> listUrgences() {
-        List<Urgences> urgences = new ArrayList<>();
-        for (Urgences u:Urgences.values())
-            urgences.add(u);
-        return new ResponseEntity<List<Urgences>>(urgences, HttpStatus.OK);
+        List<Urgences> urgences = Arrays.asList(Urgences.values());
+        List<Urgences> urgencesList = urgences.stream().sorted().collect(Collectors.toList());
+       // Collections.sort(urgences);
+        return new ResponseEntity<List<Urgences>>(urgencesList, HttpStatus.OK);
     }
 
     @GetMapping(path = "getAllTypesTrans")
@@ -101,6 +110,8 @@ public class MedicabApiApplication {
         List<Transport> list = new ArrayList<>();
         for (Transport t : Transport.values())
             list.add(t);
+
+        Collections.sort(list);
         return new ResponseEntity<List<Transport>>(list, HttpStatus.OK);
     }
     @PutMapping(path="updateAdresse")
