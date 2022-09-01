@@ -8,6 +8,7 @@ public class ResponseMessage {
     }
 
     public String getMessage() {
+
         return message;
     }
 

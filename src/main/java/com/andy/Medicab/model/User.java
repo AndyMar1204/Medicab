@@ -21,6 +21,7 @@ public class User extends Account {
     private  String alergies;
     private String donneurOrgane;
 
+
     @Lob
     private String traitement;
 

@@ -12,7 +12,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "TYPE_ACCOUNT")
 public class Account implements Serializable {
 
 	private static final long serialVersionUID = 1L;
